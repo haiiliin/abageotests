@@ -20,7 +20,7 @@ pip install abageotests
 
 ## Examples
 
-This is an minimal example:
+This is a minimal example:
 
 ```python
 from abageotests import *
