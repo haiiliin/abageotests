@@ -18,6 +18,8 @@ And then install this package:
 pip install abageotests
 ```
 
+You can also find this project in [abageotests · PyPI](https://pypi.org/project/abageotests/).
+
 ## Examples
 
 This is a minimal example:
@@ -27,7 +29,7 @@ from abageotests import *
 
 dst = AbaqusDirectShearTest(AbaqusCalculationMethod.Standard)
 
-# geometries of the modle
+# geometries of the model
 dst.SoilGeometry(0.025, 0.025, 0.025)
 dst.SolidGeometry(0.05, 0.05, 0.05)
 # material properties
