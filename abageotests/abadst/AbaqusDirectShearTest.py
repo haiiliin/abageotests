@@ -706,7 +706,8 @@ class AbaqusDirectShearTest(AbaqusModelBase):
         os.system('abaqus cae noGUI={}.py'.format(self.output_name))
 
         for filename in os.listdir():
-            if os.path.splitext(filename)[-1] in ['.com', '.dat', '.log', '.msg', '.prt', '.rpy', '.sim', '.sta', '.1']:
+            if os.path.splitext(filename)[-1] in ['.com', '.dat', '.log', '.msg', '.prt', '.rpy', '.sim', '.sta', '.1', 
+                                                  '.abq', '.mdl', '.pac', '.res', '.sel', '.stt']:
                 os.remove(filename)
 
     def plot(self):

@@ -34,7 +34,7 @@ class AbaqusModelBase:
             return
 
         if not os.path.exists(work_directory):
-            os.mkdir(work_directory)
+            os.makedirs(work_directory)
         os.chdir(work_directory)
         self.work_directory = os.getcwd()
 
