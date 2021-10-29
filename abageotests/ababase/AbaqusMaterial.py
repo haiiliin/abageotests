@@ -52,6 +52,7 @@ class AbaqusMaterial(AbaqusVariable):
                       abs_plastic_strain: float = None):
         self.setDensityParameters(density)
         self.setElasticParameters(modulus, poisson_ratio)
+        self.setMohrCoulombParameters(friction_angle, dilation_angle, cohesion_yield_stress, abs_plastic_strain)
 
     def setDensityParameters(self, density: float):
         self.density = density

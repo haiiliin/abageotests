@@ -7,7 +7,7 @@ from driverUtils import executeOnCaeStartup
 #
 # Abaqus/CAE Release 2021 replay file
 # Internal Version: 2020_03_06-22.50.37 167380
-# Run by Hailin on Wed Oct 13 16:22:48 2021
+# Run by Hailin on Wed Oct 27 16:22:48 2021
 #
 
 executeOnCaeStartup()
@@ -16,39 +16,54 @@ executeOnCaeStartup()
 CALCULATION_METHOD = 'STANDARD'  # OR EXPLICIT
 
 # TODO GEOMETRY
-SOIL_LENGTH = 0.025
-SOIL_WIDTH = 0.025
-SOIL_HEIGHT = 0.025
-SOLID_LENGTH = 0.05
-SOLID_WIDTH = 0.05
-SOLID_HEIGHT = 0.05
+# SOIL_LENGTH = 0.025
+# SOIL_WIDTH = 0.025
+# SOIL_HEIGHT = 0.025
+# SOLID_LENGTH = 0.05
+# SOLID_WIDTH = 0.05
+# SOLID_HEIGHT = 0.05
+NAIL_RADIUS = 0.05
+NAIL_LENGTH = 1.2
+SOIL_LENGTH = 1.0
+SOIL_WIDTH = 0.3
+SOIL_HEIGHT = 0.8
+SOIL_NAIL_OFFSET_HEIGHT = SOIL_HEIGHT / 2
 
 # TODO MATERIAL
 SOIL_ELASTIC_MODULUS = 4e4
-SOIL_POISSON_RATIO = 0.0
+SOIL_POISSON_RATIO = 0.2
 SOIL_DENSITY = None
-SOLID_ELASTIC_MODULUS = 2e8
-SOLID_POISSON_RATIO = 0.0
-SOLID_DENSITY = None
+SOIL_MOHR_COULOMB_FRICTION_ANGLE = 30
+SOIL_MOHR_COULOMB_DILATION_ANGLE = 3
+SOIL_MOHR_COULOMB_COHESION_YIELD_STRESS = 5
+SOIL_MOHR_COULOMB_ABS_PLASTIC_STRAIN = 0
+NAIL_ELASTIC_MODULUS = 3.2e7
+MAIL_POISSON_RATIO = 0.3
+NAIL_DENSITY = None
 
-# TODO MESH
-SOIL_MESH_METHOD = 'NUMBER'  # OR 'SIZE'
-SOIL_SEEDS_NUMBER = 2
-SOIL_SEEDS_SIZE = 0.01
-SOLID_MESH_METHOD = 'NUMBER'
-SOLID_SEEDS_NUMBER = 2
-SOLID_SEEDS_SIZE = 0.01
+# TODO MESH FIXME
+SOIL_MESH_METHOD = 'SIZE'  # OR 'SIZE'
+SOIL_SEEDS_GENERAL_NUMBER = 12
+SOIL_SEEDS_DENSE_NUMBER = 6
+SOIL_SEEDS_GENERAL_SIZE = 0.025
+SOIL_SEEDS_DENSE_SIZE = 0.01
 
-# TODO STEP
+NAIL_MESH_METHOD = 'SIZE'
+NAIL_SEEDS_GENERAL_NUMBER = 12
+NAIL_SEEDS_DENSE_NUMBER = 12
+NAIL_SEEDS_GENERAL_SIZE = 0.025
+NAIL_SEEDS_DENSE_SIZE = 0.01
+
+# TODO STEP FIXME
 # INITIAL STRESS
 INITIAL_STRESS_TIME_PERIOD = 1.0
 INITIAL_STRESS_DESCRIPTION = ''
 # GENERAL STATIC STEP
 INITIAL_STRESS_INCREMENTATION_TYPE = 'FIXED'
 INITIAL_STRESS_MAXIMAL_INCREMENTS = 100
-INITIAL_STRESS_INITIAL_INCREMENT_SIZE = 1.0
+INITIAL_STRESS_INITIAL_INCREMENT_SIZE = 0.01
 INITIAL_STRESS_MINIMAL_INCREMENT_SIZE = 1e-5
-INITIAL_STRESS_MAXIMAL_INCREMENT_SIZE = 1.0
+INITIAL_STRESS_MAXIMAL_INCREMENT_SIZE = 0.1
 INITIAL_STRESS_FIXED_INCREMENT_SIZE = 0.2
 # EXPLICIT DYNAMIC STEP
 INITIAL_STRESS_MAXIMAL_TIME_INCREMENT = 'UNLIMITED'
@@ -57,28 +72,28 @@ INITIAL_STRESS_SCALING_FACTOR = 1.0
 INITIAL_STRESS_LINEAR_BULK_VISCOSITY = 0.06
 INITIAL_STRESS_QUAD_BULK_VISCOSITY = 1.2
 
-# SHEAR
-SHEAR_TIME_PERIOD = 1.0
-SHEAR_DESCRIPTION = ''
+# SHEAR -> PULLOUT
+PULLOUT_TIME_PERIOD = 1.0
+PULLOUT_DESCRIPTION = ''
 # GENERAL STATIC STEP
-SHEAR_INCREMENTATION_TYPE = 'FIXED'
-SHEAR_MAXIMAL_INCREMENTS = 100
-SHEAR_INITIAL_INCREMENT_SIZE = 1.0
-SHEAR_MINIMAL_INCREMENT_SIZE = 1e-5
-SHEAR_MAXIMAL_INCREMENT_SIZE = 1.0
-SHEAR_FIXED_INCREMENT_SIZE = 0.2
+PULLOUT_INCREMENTATION_TYPE = 'FIXED'
+PULLOUT_MAXIMAL_INCREMENTS = 100
+PULLOUT_INITIAL_INCREMENT_SIZE = 1e-6
+PULLOUT_MINIMAL_INCREMENT_SIZE = 1e-9
+PULLOUT_MAXIMAL_INCREMENT_SIZE = 0.01
+PULLOUT_FIXED_INCREMENT_SIZE = 0.2
 # EXPLICIT DYNAMIC STEP
-SHEAR_MAXIMAL_TIME_INCREMENT = 'UNLIMITED'
-SHEAR_INCREMENT_SIZE = 'ELEMENT_BY_ELEMENT_INCREMENTATION'
-SHEAR_SCALING_FACTOR = 1.0
-SHEAR_LINEAR_BULK_VISCOSITY = 0.06
-SHEAR_QUAD_BULK_VISCOSITY = 1.2
+PULLOUT_MAXIMAL_TIME_INCREMENT = 'UNLIMITED'
+PULLOUT_INCREMENT_SIZE = 'ELEMENT_BY_ELEMENT_INCREMENTATION'
+PULLOUT_SCALING_FACTOR = 1.0
+PULLOUT_LINEAR_BULK_VISCOSITY = 0.06
+PULLOUT_QUAD_BULK_VISCOSITY = 1.2
 
-# TODO LOAD
-RP_DISPLACEMENT = [0.006, 0.0, 0.0, 0.0, 0.0, 0.0]
-RP_VELOCITY = [0.006, 0.0, 0.0, 0.0, 0.0, 0.0]
-VERTICAL_PRESSURE = 310.0
-PREDEFINED_STRESS = [-310.0, -310.0, -310.0, 0.0, 0.0, 0.0]
+# TODO LOAD FIXME
+RP_DISPLACEMENT = [0.0, 0.0, 0.008, 0.0, 0.0, 0.0]
+RP_VELOCITY = [0.0, 0.0, 0.008, 0.0, 0.0, 0.0]
+VERTICAL_PRESSURE = 300.0
+PREDEFINED_STRESS = [-300.0, -300.0, -300.0, 0.0, 0.0, 0.0]
 
 # TODO CONTACT
 # NORMAL CONTACT
@@ -117,103 +132,119 @@ tangential_useProperties = ON
 # TODO USER-DEFINED SUBROUTINE
 SUBROUTINE = 'FRIC'
 SUBROUTINE_PATH = 'FRIC_exponential_CV.for'
-N_STATE_DEPENDENT_VARS = 28
-FRICTION_PARAMETERS = ((0.0,), (250.0,), (5.19,), (0.89,), (0.147,), (0.424,), (31.2,), (7.57,), (2.06,), (0.46,), (0.5771,), (0.00115,))
+# N_STATE_DEPENDENT_VARS = 28
+# ((0.0,), (250.0,), (5.19,), (0.89,), (0.147,), (0.424,), (31.2,), (0.1,), (0.1,), (0.1,), (0.7,), (0.00115,))
+# FRICTION_PARAMETERS = ((0.0,), (250.0,), (5.19,), (0.89,), (0.147,), (0.424,), (31.2,), (0.1,), (0.1,), (0.1,), (0.7,), (0.00115,))
 
-# TODO OUTPUT
+# TODO OUTPUT FIXME
 STANDARD_FREQUENCY = 1
-EXPLICIT_NUM_INTERVALS = 50  # FIXME NOT DEFINED
+EXPLICIT_NUM_INTERVALS = 50
 FIELD_OUTPUT_VARIABLES = ['S', 'E', 'LE', 'U', 'RF', 'RT', 'RM', 'P', 'CSTRESS', 'CDISP', 'CFORCE', 'CNAREA', 'CSTATUS']
 # FIELD_OUTPUT_VARIABLES = ['S', 'E', 'LE', 'U', 'V', 'A', 'RF', 'P', 'CSTRESS', 'CFORCE', 'FSLIPR', 'FSLIP', 'PPRESS']
 HISTORY_OUTPUT_VARIABLES = ['U1', 'RF1']
 
 # TODO WORK DIRECTORY
-WORK_DIRECTORY = r'C:\Users\user\OneDrive\Documents\GitHub\CH-Model\CH_model_Python\SSI\Abaqus\DirectShear'
+WORK_DIRECTORY = r'C:\Users\user\OneDrive\Documents\GitHub\CH-Model\CH_model_Python\SSI\Abaqus\DirectShear\abageotests\abapullout\pullout_abaqus'
 os.chdir(WORK_DIRECTORY)
 
 # TODO CREATE PARTS
-# Soil part
-sketch_soil = mdb.models['Model-1'].ConstrainedSketch(name='SKETCH-SOIL', sheetSize=0.1)
-sketch_soil.rectangle(point1=(0.0, 0.0), point2=(SOIL_LENGTH, SOIL_WIDTH))
-mdb.models['Model-1'].Part(name='PART-SOIL', dimensionality=THREE_D, type=DEFORMABLE_BODY)
-mdb.models['Model-1'].parts['PART-SOIL'].BaseSolidExtrude(sketch=sketch_soil, depth=SOIL_HEIGHT)
+mdb.models['Model-1'].ConstrainedSketch(name='SKETCH-NAIL', sheetSize=NAIL_LENGTH)
+mdb.models['Model-1'].sketches['SKETCH-NAIL'].ArcByCenterEnds(center=(0.0, 0.0), direction=CLOCKWISE,
+                                                              point1=(-NAIL_RADIUS, 0.0), point2=(NAIL_RADIUS, 0.0))
+mdb.models['Model-1'].sketches['SKETCH-NAIL'].Line(point1=(NAIL_RADIUS, 0.0), point2=(-NAIL_RADIUS, 0.0))
+mdb.models['Model-1'].Part(dimensionality=THREE_D, name='PART-NAIL', type=DEFORMABLE_BODY)
+mdb.models['Model-1'].parts['PART-NAIL'].BaseSolidExtrude(depth=NAIL_LENGTH,
+                                                          sketch=mdb.models['Model-1'].sketches['SKETCH-NAIL'])
+del mdb.models['Model-1'].sketches['SKETCH-NAIL']
+mdb.models['Model-1'].ConstrainedSketch(name='SKETCH-SOIL', sheetSize=1.0)
+mdb.models['Model-1'].sketches['SKETCH-SOIL'].Line(point1=(-NAIL_RADIUS, 0.0), point2=(-NAIL_RADIUS * 2, 0.0))
+mdb.models['Model-1'].sketches['SKETCH-SOIL'].Line(point1=(-NAIL_RADIUS * 2, 0.0),
+                                                   point2=(-SOIL_HEIGHT + SOIL_NAIL_OFFSET_HEIGHT, 0.0))
+mdb.models['Model-1'].sketches['SKETCH-SOIL'].Line(point1=(-SOIL_HEIGHT + SOIL_NAIL_OFFSET_HEIGHT, 0.0),
+                                                   point2=(-SOIL_HEIGHT + SOIL_NAIL_OFFSET_HEIGHT, NAIL_RADIUS * 2))
+mdb.models['Model-1'].sketches['SKETCH-SOIL'].Line(point1=(-SOIL_HEIGHT + SOIL_NAIL_OFFSET_HEIGHT, NAIL_RADIUS * 2),
+                                                   point2=(-SOIL_HEIGHT + SOIL_NAIL_OFFSET_HEIGHT, SOIL_WIDTH))
+mdb.models['Model-1'].sketches['SKETCH-SOIL'].Line(point1=(-SOIL_HEIGHT + SOIL_NAIL_OFFSET_HEIGHT, SOIL_WIDTH),
+                                                   point2=(-NAIL_RADIUS * 2, SOIL_WIDTH))
+mdb.models['Model-1'].sketches['SKETCH-SOIL'].Line(point1=(-NAIL_RADIUS * 2, SOIL_WIDTH),
+                                                   point2=(NAIL_RADIUS * 2, SOIL_WIDTH))
+mdb.models['Model-1'].sketches['SKETCH-SOIL'].Line(point1=(NAIL_RADIUS * 2, SOIL_WIDTH),
+                                                   point2=(SOIL_NAIL_OFFSET_HEIGHT, SOIL_WIDTH))
+mdb.models['Model-1'].sketches['SKETCH-SOIL'].Line(point1=(SOIL_NAIL_OFFSET_HEIGHT, SOIL_WIDTH),
+                                                   point2=(SOIL_NAIL_OFFSET_HEIGHT, NAIL_RADIUS * 2))
+mdb.models['Model-1'].sketches['SKETCH-SOIL'].Line(point1=(SOIL_NAIL_OFFSET_HEIGHT, NAIL_RADIUS * 2),
+                                                   point2=(SOIL_NAIL_OFFSET_HEIGHT, 0.0))
+mdb.models['Model-1'].sketches['SKETCH-SOIL'].Line(point1=(SOIL_NAIL_OFFSET_HEIGHT, 0.0), point2=(NAIL_RADIUS * 2, 0.0))
+mdb.models['Model-1'].sketches['SKETCH-SOIL'].Line(point1=(NAIL_RADIUS * 2, 0.0), point2=(NAIL_RADIUS, 0.0))
+mdb.models['Model-1'].sketches['SKETCH-SOIL'].ArcByCenterEnds(center=(0.0, 0.0), direction=CLOCKWISE,
+                                                              point1=(-NAIL_RADIUS, 0.0), point2=(NAIL_RADIUS, 0.0))
+mdb.models['Model-1'].Part(dimensionality=THREE_D, name='PART-SOIL', type=DEFORMABLE_BODY)
+mdb.models['Model-1'].parts['PART-SOIL'].BaseSolidExtrude(depth=1.0,
+                                                          sketch=mdb.models['Model-1'].sketches['SKETCH-SOIL'])
 del mdb.models['Model-1'].sketches['SKETCH-SOIL']
-# Solid part
-sketch_solid = mdb.models['Model-1'].ConstrainedSketch(name='SKETCH-SOLID', sheetSize=0.1)
-sketch_solid.rectangle(point1=(0.0, 0.0), point2=(SOLID_LENGTH, SOLID_WIDTH))
-mdb.models['Model-1'].Part(name='PART-SOLID', dimensionality=THREE_D, type=DEFORMABLE_BODY)
-mdb.models['Model-1'].parts['PART-SOLID'].BaseSolidExtrude(sketch=sketch_solid, depth=SOLID_HEIGHT)
-del mdb.models['Model-1'].sketches['SKETCH-SOLID']
+
+# TODO SETS
+# SOIL
+part_soil = mdb.models['Model-1'].parts['PART-SOIL']
+part_soil.Surface(side1Faces=part_soil.faces.findAt(((0, NAIL_RADIUS, SOIL_LENGTH / 2),), ),
+                  name='SURFACE-SOIL-INTERFACE')
+part_soil.Surface(
+    side1Faces=part_soil.faces.findAt(((-SOIL_HEIGHT + SOIL_NAIL_OFFSET_HEIGHT, SOIL_WIDTH / 2, SOIL_LENGTH / 2),), ),
+    name='SURFACE-SOIL-PRESSURE')
+part_soil.Set(cells=part_soil.cells.findAt(((0, SOIL_WIDTH / 2, SOIL_LENGTH / 2),), ), name='SET-SOIL')
+part_soil.Set(faces=part_soil.faces.findAt(
+    ((0, SOIL_WIDTH / 2, 0),), ((0, SOIL_WIDTH / 2, SOIL_LENGTH),)), name='SET-SOIL-LR')
+part_soil.Set(faces=part_soil.faces.findAt(((SOIL_NAIL_OFFSET_HEIGHT, SOIL_WIDTH / 2, SOIL_LENGTH / 2),), ),
+              name='SET-SOIL-BOT')
+part_soil.Set(
+    faces=part_soil.faces.findAt(((-(SOIL_HEIGHT - SOIL_NAIL_OFFSET_HEIGHT) / 2 - NAIL_RADIUS, 0, SOIL_LENGTH / 2),),
+                                 ((SOIL_NAIL_OFFSET_HEIGHT / 2 + NAIL_RADIUS, 0, SOIL_LENGTH / 2),), ),
+    name='SET-SOIL-FRT')
+part_soil.Set(faces=part_soil.faces.findAt(((0, SOIL_WIDTH, SOIL_LENGTH / 2),), ), name='SET-SOIL-BCK')
+# NAIL
+part_nail = mdb.models['Model-1'].parts['PART-NAIL']
+part_nail.Surface(side1Faces=part_nail.faces.findAt(((0, NAIL_RADIUS, NAIL_LENGTH / 2),), ),
+                  name='SURFACE-NAIL-INTERFACE')
+part_nail.Set(cells=part_nail.cells.findAt(((0, 0, NAIL_LENGTH / 2),), ), name='SET-NAIL')
 
 # TODO ASSEMBLY INSTANCE
 assembly = mdb.models['Model-1'].rootAssembly
 assembly.DatumCsysByDefault(CARTESIAN)
 assembly.Instance(name='INSTANCE-SOIL', part=mdb.models['Model-1'].parts['PART-SOIL'], dependent=ON)
-assembly.Instance(name='INSTANCE-SOLID', part=mdb.models['Model-1'].parts['PART-SOLID'], dependent=ON)
-assembly.translate(instanceList=('INSTANCE-SOIL',), vector=((SOLID_LENGTH - SOIL_LENGTH) / 2,
-                                                            (SOLID_WIDTH - SOIL_WIDTH) / 2,
-                                                            SOLID_HEIGHT))
+assembly.Instance(name='INSTANCE-NAIL', part=mdb.models['Model-1'].parts['PART-NAIL'], dependent=ON)
+assembly.translate(instanceList=('INSTANCE-NAIL',), vector=(0, 0, -0.15))
 
-# TODO SETS
-# Sets of the soil
-part_soil = mdb.models['Model-1'].parts['PART-SOIL']
-part_soil.Surface(side1Faces=part_soil.faces.findAt(((SOIL_LENGTH / 2, SOIL_WIDTH / 2, 0),), ), name='SURFACE-SOIL-Z0')
-part_soil.Surface(side1Faces=part_soil.faces.findAt(((SOIL_LENGTH / 2, SOIL_WIDTH / 2, SOIL_HEIGHT),), ),
-                  name='SURFACE-SOIL-Z1')
-
-part_soil.Set(cells=part_soil.cells.findAt(((SOIL_LENGTH / 2, SOIL_WIDTH / 2, SOIL_HEIGHT / 2),), ), name='SET-SOIL')
-
-part_soil.Set(faces=part_soil.faces.findAt(((0, SOIL_WIDTH / 2, SOIL_HEIGHT / 2),), ), name='SET-SOIL-X0')
-part_soil.Set(faces=part_soil.faces.findAt(((SOIL_LENGTH / 2, 0, SOIL_HEIGHT / 2),), ), name='SET-SOIL-Y0')
-part_soil.Set(faces=part_soil.faces.findAt(((SOIL_LENGTH / 2, SOIL_WIDTH / 2, 0),), ), name='SET-SOIL-Z0')
-
-part_soil.Set(faces=part_soil.faces.findAt(((SOIL_LENGTH, SOIL_WIDTH / 2, SOIL_HEIGHT / 2),), ), name='SET-SOIL-X1')
-part_soil.Set(faces=part_soil.faces.findAt(((SOIL_LENGTH / 2, SOIL_WIDTH, SOIL_HEIGHT / 2),), ), name='SET-SOIL-Y1')
-part_soil.Set(faces=part_soil.faces.findAt(((SOIL_LENGTH / 2, SOIL_WIDTH / 2, SOIL_HEIGHT),), ), name='SET-SOIL-Z1')
-
-# Sets of the solid
-part_solid = mdb.models['Model-1'].parts['PART-SOLID']
-part_solid.Surface(side1Faces=part_solid.faces.findAt(((SOLID_LENGTH / 2, SOLID_WIDTH / 2, 0),), ),
-                   name='SURFACE-SOLID-Z0')
-part_solid.Surface(side1Faces=part_solid.faces.findAt(((SOLID_LENGTH / 2, SOLID_WIDTH / 2, SOLID_HEIGHT),), ),
-                   name='SURFACE-SOLID-Z1')
-
-part_solid.Set(cells=part_solid.cells.findAt(((SOLID_LENGTH / 2, SOLID_WIDTH / 2, SOLID_HEIGHT / 2),), ),
-               name='SET-SOLID')
-
-part_solid.Set(faces=part_solid.faces.findAt(((0, SOLID_WIDTH / 2, SOLID_HEIGHT / 2),), ), name='SET-SOLID-X0')
-part_solid.Set(faces=part_solid.faces.findAt(((SOLID_LENGTH / 2, 0, SOLID_HEIGHT / 2),), ), name='SET-SOLID-Y0')
-part_solid.Set(faces=part_solid.faces.findAt(((SOLID_LENGTH / 2, SOLID_WIDTH / 2, 0),), ), name='SET-SOLID-Z0')
-
-part_solid.Set(faces=part_solid.faces.findAt(((SOLID_LENGTH, SOLID_WIDTH / 2, SOLID_HEIGHT / 2),), ),
-               name='SET-SOLID-X1')
-part_solid.Set(faces=part_solid.faces.findAt(((SOLID_LENGTH / 2, SOLID_WIDTH, SOLID_HEIGHT / 2),), ),
-               name='SET-SOLID-Y1')
-part_solid.Set(faces=part_solid.faces.findAt(((SOLID_LENGTH / 2, SOLID_WIDTH / 2, SOLID_HEIGHT),), ),
-               name='SET-SOLID-Z1')
-
-# TODO MATERIAL
-# Materials
+# TODO CREATE MATERIAL
+# SOIL
 mdb.models['Model-1'].Material(name='MATERIAL-SOIL')
 mdb.models['Model-1'].materials['MATERIAL-SOIL'].Elastic(table=((SOIL_ELASTIC_MODULUS, SOIL_POISSON_RATIO),))
+mdb.models['Model-1'].materials['MATERIAL-SOIL'].MohrCoulombPlasticity(
+    table=((SOIL_MOHR_COULOMB_FRICTION_ANGLE, SOIL_MOHR_COULOMB_DILATION_ANGLE),))
+mdb.models['Model-1'].materials['MATERIAL-SOIL'].mohrCoulombPlasticity.MohrCoulombHardening(
+    table=((SOIL_MOHR_COULOMB_COHESION_YIELD_STRESS,
+            SOIL_MOHR_COULOMB_ABS_PLASTIC_STRAIN),))
+mdb.models['Model-1'].materials['MATERIAL-SOIL'].mohrCoulombPlasticity.TensionCutOff(dependencies=0,
+                                                                                     table=((0.0, 0.0),),
+                                                                                     temperatureDependency=OFF)
 if SOIL_DENSITY is not None:
     mdb.models['Model-1'].materials['MATERIAL-SOIL'].Density(table=((SOIL_DENSITY,),))
-mdb.models['Model-1'].Material(name='MATERIAL-SOLID')
-mdb.models['Model-1'].materials['MATERIAL-SOLID'].Elastic(table=((SOLID_ELASTIC_MODULUS, SOLID_POISSON_RATIO),))
-if SOLID_DENSITY is not None:
-    mdb.models['Model-1'].materials['MATERIAL-SOLID'].Density(table=((SOLID_DENSITY,),))
+# NAIL
+mdb.models['Model-1'].Material(name='MATERIAL-NAIL')
+mdb.models['Model-1'].materials['MATERIAL-NAIL'].Elastic(table=((NAIL_ELASTIC_MODULUS, MAIL_POISSON_RATIO),))
+if NAIL_DENSITY is not None:
+    mdb.models['Model-1'].materials['MATERIAL-NAIL'].Density(table=((NAIL_DENSITY,),))
 
 # Sections
 mdb.models['Model-1'].HomogeneousSolidSection(name='SECTION-SOIL', material='MATERIAL-SOIL', thickness=None)
-mdb.models['Model-1'].HomogeneousSolidSection(name='SECTION-SOLID', material='MATERIAL-SOLID', thickness=None)
+mdb.models['Model-1'].HomogeneousSolidSection(name='SECTION-NAIL', material='MATERIAL-NAIL', thickness=None)
 
 # Sections assignment
 part_soil = mdb.models['Model-1'].parts['PART-SOIL']
 part_soil.SectionAssignment(region=part_soil.sets['SET-SOIL'], sectionName='SECTION-SOIL', offset=0.0,
                             offsetType=MIDDLE_SURFACE, offsetField='', thicknessAssignment=FROM_SECTION)
-part_solid = mdb.models['Model-1'].parts['PART-SOLID']
-part_solid.SectionAssignment(region=part_solid.sets['SET-SOLID'], sectionName='SECTION-SOLID', offset=0.0,
-                             offsetType=MIDDLE_SURFACE, offsetField='', thicknessAssignment=FROM_SECTION)
+part_nail = mdb.models['Model-1'].parts['PART-NAIL']
+part_nail.SectionAssignment(region=part_nail.sets['SET-NAIL'], sectionName='SECTION-NAIL', offset=0.0,
+                            offsetType=MIDDLE_SURFACE, offsetField='', thicknessAssignment=FROM_SECTION)
 
 # TODO STEP
 if CALCULATION_METHOD == 'STANDARD':
@@ -223,11 +254,11 @@ if CALCULATION_METHOD == 'STANDARD':
                                      minInc=INITIAL_STRESS_MINIMAL_INCREMENT_SIZE,
                                      maxInc=INITIAL_STRESS_MAXIMAL_INCREMENT_SIZE,
                                      matrixSolver=DIRECT, matrixStorage=UNSYMMETRIC)
-    mdb.models['Model-1'].StaticStep(name='SHEAR', previous='INITIAL-STRESS',
-                                     maxNumInc=SHEAR_MAXIMAL_INCREMENTS,
-                                     initialInc=SHEAR_INITIAL_INCREMENT_SIZE,
-                                     minInc=SHEAR_MINIMAL_INCREMENT_SIZE,
-                                     maxInc=SHEAR_MAXIMAL_INCREMENT_SIZE,
+    mdb.models['Model-1'].StaticStep(name='PULLOUT', previous='INITIAL-STRESS',
+                                     maxNumInc=PULLOUT_MAXIMAL_INCREMENTS,
+                                     initialInc=PULLOUT_INITIAL_INCREMENT_SIZE,
+                                     minInc=PULLOUT_MINIMAL_INCREMENT_SIZE,
+                                     maxInc=PULLOUT_MAXIMAL_INCREMENT_SIZE,
                                      matrixSolver=DIRECT, matrixStorage=UNSYMMETRIC)
 else:
     if INITIAL_STRESS_INCREMENTATION_TYPE == 'AUTOMATIC':
@@ -262,34 +293,38 @@ else:
                                                        improvedDtMethod=ON,
                                                        timeIncrementationMethod=FIXED_USER_DEFINED_INC,
                                                        userDefinedInc=INITIAL_STRESS_INCREMENT_SIZE)
-    if SHEAR_INCREMENTATION_TYPE == 'AUTOMATIC':
-        if SHEAR_MAXIMAL_TIME_INCREMENT == 'UNLIMITED':
-            mdb.models['Model-1'].ExplicitDynamicsStep(name='SHEAR', previous='INITIAL-STRESS',
-                                                       timePeriod=SHEAR_TIME_PERIOD,
-                                                       linearBulkViscosity=SHEAR_LINEAR_BULK_VISCOSITY,
-                                                       quadBulkViscosity=SHEAR_QUAD_BULK_VISCOSITY, improvedDtMethod=ON,
+    if PULLOUT_INCREMENTATION_TYPE == 'AUTOMATIC':
+        if PULLOUT_MAXIMAL_TIME_INCREMENT == 'UNLIMITED':
+            mdb.models['Model-1'].ExplicitDynamicsStep(name='PULLOUT', previous='INITIAL-STRESS',
+                                                       timePeriod=PULLOUT_TIME_PERIOD,
+                                                       linearBulkViscosity=PULLOUT_LINEAR_BULK_VISCOSITY,
+                                                       quadBulkViscosity=PULLOUT_QUAD_BULK_VISCOSITY,
+                                                       improvedDtMethod=ON,
                                                        timeIncrementationMethod=AUTOMATIC_GLOBAL)
         else:
-            mdb.models['Model-1'].ExplicitDynamicsStep(name='SHEAR', previous='INITIAL-STRESS',
-                                                       timePeriod=SHEAR_TIME_PERIOD,
-                                                       linearBulkViscosity=SHEAR_LINEAR_BULK_VISCOSITY,
-                                                       quadBulkViscosity=SHEAR_QUAD_BULK_VISCOSITY, improvedDtMethod=ON,
-                                                       maxIncrement=SHEAR_MAXIMAL_TIME_INCREMENT,
+            mdb.models['Model-1'].ExplicitDynamicsStep(name='PULLOUT', previous='INITIAL-STRESS',
+                                                       timePeriod=PULLOUT_TIME_PERIOD,
+                                                       linearBulkViscosity=PULLOUT_LINEAR_BULK_VISCOSITY,
+                                                       quadBulkViscosity=PULLOUT_QUAD_BULK_VISCOSITY,
+                                                       improvedDtMethod=ON,
+                                                       maxIncrement=PULLOUT_MAXIMAL_TIME_INCREMENT,
                                                        timeIncrementationMethod=AUTOMATIC_GLOBAL)
     else:
-        if SHEAR_INCREMENT_SIZE == 'ELEMENT_BY_ELEMENT_INCREMENTATION':
-            mdb.models['Model-1'].ExplicitDynamicsStep(name='SHEAR', previous='INITIAL-STRESS',
-                                                       timePeriod=SHEAR_TIME_PERIOD,
-                                                       linearBulkViscosity=SHEAR_LINEAR_BULK_VISCOSITY,
-                                                       quadBulkViscosity=SHEAR_QUAD_BULK_VISCOSITY, improvedDtMethod=ON,
+        if PULLOUT_INCREMENT_SIZE == 'ELEMENT_BY_ELEMENT_INCREMENTATION':
+            mdb.models['Model-1'].ExplicitDynamicsStep(name='PULLOUT', previous='INITIAL-STRESS',
+                                                       timePeriod=PULLOUT_TIME_PERIOD,
+                                                       linearBulkViscosity=PULLOUT_LINEAR_BULK_VISCOSITY,
+                                                       quadBulkViscosity=PULLOUT_QUAD_BULK_VISCOSITY,
+                                                       improvedDtMethod=ON,
                                                        timeIncrementationMethod=FIXED_EBE)
         else:
-            mdb.models['Model-1'].ExplicitDynamicsStep(name='SHEAR', previous='INITIAL-STRESS',
-                                                       timePeriod=SHEAR_TIME_PERIOD,
-                                                       linearBulkViscosity=SHEAR_LINEAR_BULK_VISCOSITY,
-                                                       quadBulkViscosity=SHEAR_QUAD_BULK_VISCOSITY, improvedDtMethod=ON,
+            mdb.models['Model-1'].ExplicitDynamicsStep(name='PULLOUT', previous='INITIAL-STRESS',
+                                                       timePeriod=PULLOUT_TIME_PERIOD,
+                                                       linearBulkViscosity=PULLOUT_LINEAR_BULK_VISCOSITY,
+                                                       quadBulkViscosity=PULLOUT_QUAD_BULK_VISCOSITY,
+                                                       improvedDtMethod=ON,
                                                        timeIncrementationMethod=FIXED_USER_DEFINED_INC,
-                                                       userDefinedInc=SHEAR_INCREMENT_SIZE)
+                                                       userDefinedInc=PULLOUT_INCREMENT_SIZE)
 
 # TODO CONTACT
 # Contact property
@@ -383,18 +418,17 @@ else:  # USER_DEFINED
         useProperties=tangential_useProperties,
         table=tangential_table)
 
-
 # Contact assignment
 assembly = mdb.models['Model-1'].rootAssembly
-region_solid = assembly.instances['INSTANCE-SOLID'].surfaces['SURFACE-SOLID-Z1']
-region_soil = assembly.instances['INSTANCE-SOIL'].surfaces['SURFACE-SOIL-Z0']
+region_nail = assembly.instances['INSTANCE-NAIL'].surfaces['SURFACE-NAIL-INTERFACE']
+region_soil = assembly.instances['INSTANCE-SOIL'].surfaces['SURFACE-SOIL-INTERFACE']
 if CALCULATION_METHOD == 'STANDARD':
-    mdb.models['Model-1'].SurfaceToSurfaceContactStd(name='Int-1', createStepName='Initial', master=region_solid,
+    mdb.models['Model-1'].SurfaceToSurfaceContactStd(name='Int-1', createStepName='Initial', master=region_nail,
                                                      slave=region_soil, sliding=FINITE, thickness=ON,
                                                      interactionProperty='IntProp-1', adjustMethod=NONE,
                                                      initialClearance=OMIT, datumAxis=None, clearanceRegion=None)
 else:  # EXPLICIT
-    mdb.models['Model-1'].SurfaceToSurfaceContactExp(name='Int-1', createStepName='Initial', master=region_solid,
+    mdb.models['Model-1'].SurfaceToSurfaceContactExp(name='Int-1', createStepName='Initial', master=region_nail,
                                                      slave=region_soil, sliding=FINITE, initialClearance=OMIT,
                                                      interactionProperty='IntProp-1', datumAxis=None,
                                                      clearanceRegion=None,
@@ -402,7 +436,7 @@ else:  # EXPLICIT
 
 # TODO LOAD
 # Vertical pressure
-region_pressure = mdb.models['Model-1'].rootAssembly.instances['INSTANCE-SOIL'].surfaces['SURFACE-SOIL-Z1']
+region_pressure = mdb.models['Model-1'].rootAssembly.instances['INSTANCE-SOIL'].surfaces['SURFACE-SOIL-PRESSURE']
 mdb.models['Model-1'].Pressure(name='SOIL-VERTICAL-PRESSURE', createStepName='INITIAL-STRESS', region=region_pressure,
                                distributionType=UNIFORM, field='', magnitude=VERTICAL_PRESSURE, amplitude=UNSET)
 # Predefined stress
@@ -413,84 +447,54 @@ mdb.models['Model-1'].Stress(name='SOIL-PREDEFINED-STRESS', region=region_predef
 
 # Confining pressure
 # Reference point
-mdb.models['Model-1'].parts['PART-SOLID'].ReferencePoint(point=(0.0, 0.0, 0.0))
-RP = mdb.models['Model-1'].parts['PART-SOLID'].referencePoints[11]
-mdb.models['Model-1'].parts['PART-SOLID'].Set(referencePoints=(RP,), name='SET-RP')
+mdb.models['Model-1'].parts['PART-NAIL'].ReferencePoint(point=(0.0, 0.0, NAIL_LENGTH))
+RP = mdb.models['Model-1'].parts['PART-NAIL'].referencePoints[4]
+mdb.models['Model-1'].parts['PART-NAIL'].Set(referencePoints=(RP,), name='SET-RP')
 
 # Rigid body
-region1 = mdb.models['Model-1'].rootAssembly.instances['INSTANCE-SOLID'].sets['SET-RP']
-region2 = mdb.models['Model-1'].rootAssembly.instances['INSTANCE-SOLID'].sets['SET-SOLID']
-mdb.models['Model-1'].RigidBody(name='CONSTRAINT-SOLID', refPointRegion=region1, bodyRegion=region2)
+region1 = mdb.models['Model-1'].rootAssembly.instances['INSTANCE-NAIL'].sets['SET-RP']
+region2 = mdb.models['Model-1'].rootAssembly.instances['INSTANCE-NAIL'].sets['SET-NAIL']
+mdb.models['Model-1'].RigidBody(name='CONSTRAINT-RIGID-NAIL', refPointRegion=region1, bodyRegion=region2)
 
-# BC-RP INITIAL: FIXED; SHEAR: U1 = 0.006
-region_RP = mdb.models['Model-1'].rootAssembly.instances['INSTANCE-SOLID'].sets['SET-RP']
+# BC-RP INITIAL: FIXED; PULLOUT: U1 = 0.008
+region_RP = mdb.models['Model-1'].rootAssembly.instances['INSTANCE-NAIL'].sets['SET-RP']
 if CALCULATION_METHOD == 'STANDARD':
     mdb.models['Model-1'].DisplacementBC(name='BC-RP', createStepName='Initial',
                                          region=region_RP, u1=SET, u2=SET, u3=SET, ur1=SET, ur2=SET, ur3=SET,
                                          amplitude=UNSET, distributionType=UNIFORM, fieldName='', localCsys=None)
     mdb.models['Model-1'].boundaryConditions['BC-RP'].setValuesInStep(
-        stepName='SHEAR', u1=RP_DISPLACEMENT[0], u2=RP_DISPLACEMENT[1], u3=RP_DISPLACEMENT[2],
+        stepName='PULLOUT', u1=RP_DISPLACEMENT[0], u2=RP_DISPLACEMENT[1], u3=RP_DISPLACEMENT[2],
         ur1=RP_DISPLACEMENT[3], ur2=RP_DISPLACEMENT[4], ur3=RP_DISPLACEMENT[5])
 else:
     mdb.models['Model-1'].VelocityBC(name='BC-RP', createStepName='Initial',
                                      region=region_RP, v1=SET, v2=SET, v3=SET, vr1=SET, vr2=SET, vr3=SET,
                                      amplitude=UNSET, distributionType=UNIFORM, fieldName='', localCsys=None)
     mdb.models['Model-1'].boundaryConditions['BC-RP'].setValuesInStep(
-        stepName='SHEAR', v1=RP_VELOCITY[0], v2=RP_VELOCITY[1], v3=RP_VELOCITY[2],
+        stepName='PULLOUT', v1=RP_VELOCITY[0], v2=RP_VELOCITY[1], v3=RP_VELOCITY[2],
         vr1=RP_VELOCITY[3], vr2=RP_VELOCITY[4], vr3=RP_VELOCITY[5])
 
-# BC-SOIL-X0 INITIAL: U1 = 0
-assembly = mdb.models['Model-1'].rootAssembly
-region_X0 = assembly.instances['INSTANCE-SOIL'].sets['SET-SOIL-X0']
-if CALCULATION_METHOD == 'STANDARD':
-    mdb.models['Model-1'].DisplacementBC(name='BC-SOIL-X0', createStepName='Initial',
-                                         region=region_X0, u1=0.0, u2=UNSET, u3=UNSET, ur1=UNSET, ur2=UNSET, ur3=UNSET,
-                                         amplitude=UNSET, fixed=OFF, distributionType=UNIFORM, fieldName='',
-                                         localCsys=None)
-else:
-    mdb.models['Model-1'].VelocityBC(name='BC-SOIL-X0', createStepName='Initial',
-                                     region=region_X0, v1=0.0, v2=UNSET, v3=UNSET, vr1=UNSET, vr2=UNSET, vr3=UNSET,
-                                     amplitude=UNSET, distributionType=UNIFORM, fieldName='',
+# Boundary conditions
+region_bot = assembly.instances['INSTANCE-SOIL'].sets['SET-SOIL-BOT']
+mdb.models['Model-1'].DisplacementBC(name='BC-SOIL-BOT', createStepName='Initial',
+                                     region=region_bot, u1=0.0, u2=UNSET, u3=UNSET, ur1=UNSET, ur2=UNSET, ur3=UNSET,
+                                     amplitude=UNSET, fixed=OFF, distributionType=UNIFORM, fieldName='',
                                      localCsys=None)
 
-# BC-SOIL-X1 INITIAL: U1 = 0
-region_X1 = assembly.instances['INSTANCE-SOIL'].sets['SET-SOIL-X1']
-if CALCULATION_METHOD == 'STANDARD':
-    mdb.models['Model-1'].DisplacementBC(name='BC-SOIL-X1', createStepName='Initial',
-                                         region=region_X1, u1=0.0, u2=UNSET, u3=UNSET, ur1=UNSET, ur2=UNSET, ur3=UNSET,
-                                         amplitude=UNSET, fixed=OFF, distributionType=UNIFORM, fieldName='',
-                                         localCsys=None)
-else:
-    mdb.models['Model-1'].VelocityBC(name='BC-SOIL-X1', createStepName='Initial',
-                                     region=region_X1, v1=0.0, v2=UNSET, v3=UNSET, vr1=UNSET, vr2=UNSET, vr3=UNSET,
-                                     amplitude=UNSET, distributionType=UNIFORM, fieldName='',
+region_bck = assembly.instances['INSTANCE-SOIL'].sets['SET-SOIL-BCK']
+mdb.models['Model-1'].DisplacementBC(name='BC-SOIL-BCK', createStepName='Initial',
+                                     region=region_bck, u1=UNSET, u2=0.0, u3=UNSET, ur1=UNSET, ur2=UNSET, ur3=UNSET,
+                                     amplitude=UNSET, fixed=OFF, distributionType=UNIFORM, fieldName='',
                                      localCsys=None)
 
-# BC-SOIL-Y0 INITIAL: U2 = 0
-region_Y0 = assembly.instances['INSTANCE-SOIL'].sets['SET-SOIL-Y0']
-if CALCULATION_METHOD == 'STANDARD':
-    mdb.models['Model-1'].DisplacementBC(name='BC-SOIL-Y0', createStepName='Initial',
-                                         region=region_Y0, u1=UNSET, u2=0.0, u3=UNSET, ur1=UNSET, ur2=UNSET, ur3=UNSET,
-                                         amplitude=UNSET, fixed=OFF, distributionType=UNIFORM, fieldName='',
-                                         localCsys=None)
-else:
-    mdb.models['Model-1'].VelocityBC(name='BC-SOIL-Y0', createStepName='Initial',
-                                     region=region_Y0, v1=UNSET, v2=0.0, v3=UNSET, vr1=UNSET, vr2=UNSET, vr3=UNSET,
-                                     amplitude=UNSET, distributionType=UNIFORM, fieldName='',
+region_lr = assembly.instances['INSTANCE-SOIL'].sets['SET-SOIL-LR']
+mdb.models['Model-1'].DisplacementBC(name='BC-SOIL-LR', createStepName='Initial',
+                                     region=region_lr, u1=UNSET, u2=UNSET, u3=0.0, ur1=UNSET, ur2=UNSET, ur3=UNSET,
+                                     amplitude=UNSET, fixed=OFF, distributionType=UNIFORM, fieldName='',
                                      localCsys=None)
 
-# BC-SOIL-Y1 INITIAL: U2 = 0
-region_Y1 = assembly.instances['INSTANCE-SOIL'].sets['SET-SOIL-Y1']
-if CALCULATION_METHOD == 'STANDARD':
-    mdb.models['Model-1'].DisplacementBC(name='BC-SOIL-Y1', createStepName='Initial',
-                                         region=region_Y1, u1=UNSET, u2=0.0, u3=UNSET, ur1=UNSET, ur2=UNSET, ur3=UNSET,
-                                         amplitude=UNSET, fixed=OFF, distributionType=UNIFORM, fieldName='',
-                                         localCsys=None)
-else:
-    mdb.models['Model-1'].VelocityBC(name='BC-SOIL-Y1', createStepName='Initial',
-                                     region=region_Y1, v1=UNSET, v2=0.0, v3=UNSET, vr1=UNSET, vr2=UNSET, vr3=UNSET,
-                                     amplitude=UNSET, distributionType=UNIFORM, fieldName='',
-                                     localCsys=None)
+region_frt = assembly.instances['INSTANCE-SOIL'].sets['SET-SOIL-FRT']
+mdb.models['Model-1'].YsymmBC(createStepName='Initial', localCsys=None, name='BC-FRT',
+                              region=region_frt)
 
 # TODO MESH
 # Element type
@@ -501,17 +505,38 @@ elemType2 = mesh.ElemType(elemCode=C3D6, elemLibrary=STANDARD)
 elemType3 = mesh.ElemType(elemCode=C3D4, elemLibrary=STANDARD)
 
 p = mdb.models['Model-1'].parts['PART-SOIL']
-cells = p.cells.findAt(((SOIL_LENGTH / 2, SOIL_WIDTH / 2, SOIL_HEIGHT / 2),), )
-p.setElementType(regions=(cells,), elemTypes=(elemType1, elemType2, elemType3))
+region_soil = mdb.models['Model-1'].rootAssembly.instances['INSTANCE-SOIL'].sets['SET-SOIL']
+p.setElementType(regions=region_soil, elemTypes=(elemType1, elemType2, elemType3))
 
 if SOIL_MESH_METHOD == 'SIZE':
-    p.seedPart(size=SOIL_SEEDS_SIZE, deviationFactor=0.1, minSizeFactor=0.1)
+    p.seedPart(size=SOIL_SEEDS_GENERAL_SIZE, deviationFactor=0.1, minSizeFactor=0.1)
+    p = mdb.models['Model-1'].parts['PART-SOIL']
+    pickedEdges = p.edges.findAt(
+        ((0, NAIL_RADIUS, 0),),
+        ((0, NAIL_RADIUS, SOIL_LENGTH),),
+        ((-NAIL_RADIUS*1.5, 0, 0),),
+        ((-NAIL_RADIUS*1.5, 0, SOIL_LENGTH),),
+        ((NAIL_RADIUS*1.5, 0, 0),),
+        ((NAIL_RADIUS*1.5, 0, SOIL_LENGTH),),
+    )
+    p.seedEdgeBySize(edges=pickedEdges, size=SOIL_SEEDS_DENSE_SIZE, deviationFactor=0.1, minSizeFactor=0.1,
+                     constraint=FINER)
 else:
-    p.seedEdgeByNumber(edges=p.edges, number=SOIL_SEEDS_NUMBER, constraint=FINER)
+    p = mdb.models['Model-1'].parts['PART-SOIL']
+    p.seedEdgeByNumber(edges=p.edges, number=SOIL_SEEDS_GENERAL_NUMBER, constraint=FINER)
+    pickedEdges = p.edges.findAt(
+        ((0, NAIL_RADIUS, 0),),
+        ((0, NAIL_RADIUS, SOIL_LENGTH),),
+        ((-NAIL_RADIUS*1.5, 0, 0),),
+        ((-NAIL_RADIUS*1.5, 0, SOIL_LENGTH),),
+        ((NAIL_RADIUS*1.5, 0, 0),),
+        ((NAIL_RADIUS*1.5, 0, SOIL_LENGTH),),
+    )
+    p.seedEdgeByNumber(edges=pickedEdges, number=SOIL_SEEDS_DENSE_NUMBER, constraint=FINER)
 
 mdb.models['Model-1'].parts['PART-SOIL'].generateMesh()
 
-# Mesh solid
+# Mesh nail
 if CALCULATION_METHOD == 'STANDARD':
     elemType1 = mesh.ElemType(elemCode=C3D8R, elemLibrary=STANDARD, kinematicSplit=AVERAGE_STRAIN,
                               secondOrderAccuracy=OFF, hourglassControl=ENHANCED, distortionControl=DEFAULT)
@@ -521,33 +546,31 @@ else:
 
 elemType2 = mesh.ElemType(elemCode=C3D6, elemLibrary=STANDARD)
 elemType3 = mesh.ElemType(elemCode=C3D4, elemLibrary=STANDARD)
-p = mdb.models['Model-1'].parts['PART-SOLID']
-cells = p.cells.findAt(((SOLID_LENGTH / 2, SOLID_WIDTH / 2, SOLID_HEIGHT / 2),), )
-p.setElementType(regions=(cells,), elemTypes=(elemType1, elemType2, elemType3))
+p = mdb.models['Model-1'].parts['PART-NAIL']
+region_nail = mdb.models['Model-1'].rootAssembly.instances['INSTANCE-NAIL'].sets['SET-NAIL']
+p.setElementType(regions=region_nail, elemTypes=(elemType1, elemType2, elemType3))
 
-if SOLID_MESH_METHOD == 'SIZE':
-    p.seedPart(size=SOLID_SEEDS_SIZE, deviationFactor=0.1, minSizeFactor=0.1)
+if NAIL_MESH_METHOD == 'SIZE':
+    p.seedPart(size=NAIL_SEEDS_GENERAL_SIZE, deviationFactor=0.1, minSizeFactor=0.1)
+    pickedEdges = p.edges.findAt(
+        ((0, NAIL_RADIUS, 0),),
+        ((0, NAIL_RADIUS, NAIL_LENGTH),),
+        ((0, 0, 0),),
+        ((0, 0, NAIL_LENGTH),),
+    )
+    p.seedEdgeBySize(edges=pickedEdges, size=NAIL_SEEDS_DENSE_SIZE, deviationFactor=0.1, minSizeFactor=0.1,
+                     constraint=FINER)
 else:
-    p.seedEdgeByNumber(edges=p.edges, number=SOLID_SEEDS_NUMBER, constraint=FINER)
+    p.seedEdgeByNumber(edges=p.edges, number=NAIL_SEEDS_GENERAL_NUMBER, constraint=FINER)
+    pickedEdges = p.edges.findAt(
+        ((0, NAIL_RADIUS, 0),),
+        ((0, NAIL_RADIUS, NAIL_LENGTH),),
+        ((0, 0, 0),),
+        ((0, 0, NAIL_LENGTH),),
+    )
+    p.seedEdgeByNumber(edges=pickedEdges, number=NAIL_SEEDS_DENSE_NUMBER, constraint=FINER)
 
-mdb.models['Model-1'].parts['PART-SOLID'].generateMesh()
-
-# TODO FIELD OUTPUT REQUEST FIXME Modify the input file to add SDV variable of the contact
-if CALCULATION_METHOD == 'STANDARD':
-    mdb.models['Model-1'].fieldOutputRequests['F-Output-1'].setValues(
-        variables=tuple(FIELD_OUTPUT_VARIABLES),
-        frequency=STANDARD_FREQUENCY)
-else:  # EXPLICIT
-    mdb.models['Model-1'].fieldOutputRequests['F-Output-1'].setValues(
-        variables=tuple(FIELD_OUTPUT_VARIABLES),
-        numIntervals=EXPLICIT_NUM_INTERVALS)
-    pass
-
-# TODO HISTORY OUTPUT REQUEST
-regionDef = mdb.models['Model-1'].rootAssembly.allInstances['INSTANCE-SOLID'].sets['SET-RP']
-mdb.models['Model-1'].HistoryOutputRequest(name='H-Output-1', createStepName='SHEAR',
-                                           variables=tuple(HISTORY_OUTPUT_VARIABLES), region=regionDef,
-                                           sectionPoints=DEFAULT, rebar=EXCLUDE)
+mdb.models['Model-1'].parts['PART-NAIL'].generateMesh()
 
 # TODO JOB
 mdb.Job(name='Job-1', model='Model-1', description='', type=ANALYSIS,
@@ -559,23 +582,11 @@ mdb.Job(name='Job-1', model='Model-1', description='', type=ANALYSIS,
         scratch='', resultsFormat=ODB, multiprocessingMode=DEFAULT, numCpus=1,
         numGPUs=0)
 
-# TODO MODIFY INPUT FILE: ADD SDV OUTPUT VARIABLES
-if CALCULATION_METHOD == 'STANDARD':
-    mdb.models['Model-1'].keywordBlock.synchVersions(storeNodesAndElements=False)
-    mdb.models['Model-1'].keywordBlock.replace(101, """
-    *Contact Output
-    CDISP, CFORCE, CNAREA, CSTATUS, CSTRESS, SDV""")
-    mdb.models['Model-1'].keywordBlock.replace(115, """
-    *Contact Output
-    CDISP, CFORCE, CNAREA, CSTATUS, CSTRESS, SDV""")
-else:  # EXPLICIT
-    pass
-
 # TODO WRITE INPUT FILE
 mdb.jobs['Job-1'].writeInput()
 
 # TODO SAVE CAE MODEL TO FILE
-mdb.saveAs(pathName='dst.cae')
+mdb.saveAs(pathName='pullout.cae')
 
 # TODO SUBMIT JOB
 # mdb.jobs['Job-1'].submit(consistencyChecking=OFF)

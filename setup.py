@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
  
 setuptools.setup(
     name="abageotests",
-    version="0.0.1",
+    version="0.0.3",
     author="WANG Hailin",
     author_email="hailin.wang@connect.polyu.hk",
     description="A package to generate and execute python scripts of abaqus models of geotechnical tests",

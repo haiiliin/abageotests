@@ -7,5 +7,6 @@ from .AbaqusMesh import *
 from .AbaqusSubroutine import *
 from .AbaqusStep import *
 from .AbaqusOutput import *
+from .AbaqusContact import *
 
 from .AbaqusModelBase import *

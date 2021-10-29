@@ -22,44 +22,94 @@ You can also find this project in [abageotests · PyPI](https://pypi.org/project
 
 ## Examples
 
-This is a minimal example:
+## An example of direct shear test
 
 ```python
 from abageotests import *
 
 dst = AbaqusDirectShearTest(AbaqusCalculationMethod.Standard)
+dst.InitialStressGeneralStaticStep(
+    time_period=1.0, initial_increment_size=0.1,
+    maximal_increment_size=1.0, maximal_increments=10000)
+dst.ShearGeneralStaticStep(
+    time_period=1.0, initial_increment_size=0.01,
+    maximal_increment_size=0.01, maximal_increments=1000000)
 
-# geometries of the model
-dst.SoilGeometry(0.025, 0.025, 0.025)
-dst.SolidGeometry(0.05, 0.05, 0.05)
-# material properties
+dst.Displacement(0.006, 0, 0, 0, 0, 0)
+dst.NormalContact(AbaqusNormalContactType.Hard, constraintEnforcementMethod=DEFAULT)
+dst.TangentialContact(AbaqusTangentialContactType.Frictionless)
+
+dst.WorkDirectory('dst-example')
+
+dst.SoilGeometry(0.06, 0.06, 0.02)
+dst.SolidGeometry(0.1, 0.1, 0.02)
+dst.SoilMesh(AbaqusMeshMethod.BySize, 0.01)
+dst.SolidMesh(AbaqusMeshMethod.BySize, 0.01)
+
 dst.SoilMaterial(4e4, 0.0, 2e8)
 dst.SolidMaterial(2e8, 0.0, 2.0)
-# steps
-dst.GeneralStaticStep('Initial-Stress', time_period=1.0, initial_increment_size=0.1, 
-                      maximal_increment_size=1.0, maximal_increments=10000)
-dst.GeneralStaticStep('Shear', time_period=1.0, initial_increment_size=0.01, 
-                      maximal_increment_size=0.01, maximal_increments=1000000)
-# mesh parameters
-dst.SoilMesh(AbaqusMeshMethod.ByNumber, 1)
-dst.SolidMesh(AbaqusMeshMethod.ByNumber, 1)
-# output variables
-dst.DefaultFieldOutput(['S', 'E', 'LE', 'U', 'RF', 'RT', 'RM', 'P', 
-                        'CSTRESS', 'CDISP', 'CFORCE', 'CNAREA', 'CSTATUS'])
-dst.DefaultHistoryOutput(['U1', 'RF1'], 50)
-# loads
-dst.SoilDisplacement(0.006, 0, 0, 0, 0, 0)
-dst.VerticalPressure(310)
-dst.PredefinedConfiningStress(-310, -310, -310, 0, 0, 0)
-# friction subroutines
-dst.FrictionSubroutine(AbaqusSubroutineType.FRIC, '', 28, [])
-# other parameters
-dst.WorkDirectory('dst-sample')
+
+dst.FieldOutput(['S', 'E', 'LE', 'U', 'RF', 'RT', 'RM', 'P', 
+                 'CSTRESS', 'CDISP', 'CFORCE', 'CNAREA', 'CSTATUS'])
+dst.HistoryOutput(['U1', 'RF1'], 50)
+
+dst.Pressure(310)
+dst.PredefinedStress(-310, -310, -310, 0, 0, 0)
+
 dst.ModelName('dst')
 dst.OutputName('output')
 dst.generateAbaqusPythonScript()
+dst.generateAbaqusCaeModel()
 dst.submit()
+dst.extractOutputData()
 dst.plot()
 dst.resetWorkDirectory()
+```
+
+## An example of pullout test
+
+```python
+from abageotests import *
+
+
+pullout = AbaqusPullOut(AbaqusCalculationMethod.Standard)
+pullout.NailGeometry(0.05, 1.2)
+pullout.SoilGeometry(1.0, 0.3, 0.8)
+pullout.NailOffsetGeometry(0.4)
+
+pullout.SoilMaterial(4e4, 0.3, None, 30.0, 3.0, 5.0, 0.0)
+pullout.NailMaterial(3.2e7, 0.2)
+
+pullout.Displacement(0.0, 0.0, 8e-4, 0.0, 0.0, 0.0)
+pullout.Pressure(310.0)
+pullout.PredefinedStress(-310.0, -310.0, -310.0, 0.0, 0.0, 0.0)
+
+pullout.NormalContact(AbaqusNormalContactType.Hard, constraintEnforcementMethod=DEFAULT)
+pullout.TangentialContact(AbaqusTangentialContactType.Frictionless)
+
+pullout.SoilMesh(AbaqusMeshDenseMethod.General, AbaqusMeshMethod.BySize, 0.025)
+pullout.SoilMesh(AbaqusMeshDenseMethod.Dense, AbaqusMeshMethod.BySize, 0.01)
+pullout.NailMesh(AbaqusMeshDenseMethod.General, AbaqusMeshMethod.BySize, 0.025)
+pullout.NailMesh(AbaqusMeshDenseMethod.Dense, AbaqusMeshMethod.BySize, 0.01)
+
+pullout.InitialStressGeneralStaticStep(
+    time_period=1.0, initial_increment_size=0.01, maximal_increment_size=0.1,
+    minimal_increment_size=0.001, maximal_increments=1000)
+pullout.PulloutGeneralStaticStep(
+    time_period=1.0, initial_increment_size=0.01, maximal_increment_size=0.1,
+    minimal_increment_size=0.001, maximal_increments=1000)
+
+pullout.FieldOutput(['S', 'E', 'LE', 'U', 'V', 'A', 'RF', 'P', 
+                     'CSTRESS', 'CFORCE', 'FSLIPR', 'FSLIP', 'PPRESS'])
+pullout.HistoryOutput(['U1', 'RF1'], 50)
+
+pullout.WorkDirectory('pullout-example')
+pullout.ModelName('pullout')
+pullout.OutputName('output')
+pullout.generateAbaqusPythonScript()
+pullout.generateAbaqusCaeModel()
+pullout.submit()
+pullout.extractOutputData()
+pullout.resetWorkDirectory()
 ```
 
