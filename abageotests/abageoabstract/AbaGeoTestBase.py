@@ -1,5 +1,6 @@
 import typing
 
+from ..ababase.AbaqusContact import AbaqusTangentialContactType
 from ..ababase.AbaqusModelBase import AbaqusModelBase
 from ..ababase.AbaqusSubroutine import AbaqusSubroutineType
 from ..ababase.abaqusConstants import *
