@@ -260,6 +260,9 @@ class AbaGeoTestBase(AbaqusModelBase):
         -------
         None
         """
+        os.chdir(self.work_directory)
+        if self.contacts['Contact'].tangential_contact_type != AbaqusTangentialContactType.UserDefined:
+            return
         os.system('abaqus cae noGUI={}.py'.format(self.output_name))
 
         for filename in os.listdir():

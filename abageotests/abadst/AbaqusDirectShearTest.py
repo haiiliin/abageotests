@@ -1,9 +1,8 @@
-import os
-import re
 import shutil
 import typing
 
 import numpy as np
+from abageotests import AbaqusTangentialContactType
 from matplotlib import pyplot as plt
 
 from ..ababase.AbaqusGeometry import AbaqusGeometry
