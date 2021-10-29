@@ -71,7 +71,6 @@ dst.resetWorkDirectory()
 ```python
 from abageotests import *
 
-
 pullout = AbaqusPullOut(AbaqusCalculationMethod.Standard)
 pullout.NailGeometry(0.05, 1.2)
 pullout.SoilGeometry(1.0, 0.3, 0.8)
